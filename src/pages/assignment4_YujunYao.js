@@ -81,7 +81,6 @@ const Charts = () => {
         setMonth(event.target.value);
     };
 
-
     return (
         <Container >
             <Row>

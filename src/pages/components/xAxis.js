@@ -17,54 +17,48 @@
 
 function XAxis(props){
     const { xScale, height, width, axisLable } = props;
+
+    // Ensure xScale exists before proceeding
+    if (!xScale) return <g></g>;
+
     const isLinear = typeof xScale.domain()[0] === 'number';
-    //const ticks = xScale.ticks();
-    //Note:
-    //1. XAxis works for two cases: the xScale is linear (i.e., scatter plot) and the xScalse is discrete (i.e., bar chart)
-    //2. you can use typeof(xScale.domain()[0]) to decide the return value
-    //3. if typeof(xScale.domain()[0]) is a number, xScale is a linear scale; if it is a string, it is a scaleBand.
-    
-    if(xScale) {
-        return (<g>
-        <line x1 ={0} y1={height} x2={width} y2={height} stroke={'black'}/>
-        {isLinear && xScale.ticks().map(ticks => (
-                    <g key={ticks} transform={`translate(${xScale(ticks)}, ${height})`}>
-                        <line y2={5} stroke={"black"} />
-                        <text
-                            style={{ textAnchor: 'middle', fontSize: '10px' }}
-                            y ={15}
-                        >
-                            {ticks}
-                        </text>   
-            </g>))}
-        {!isLinear && xScale.domain().map(tickValue => (
-            <g key={tickValue} transform={`translate(${xScale(tickValue) + xScale.bandwidth() /2}, ${height})`}>
-                <line y2={0} stroke={"black"} />
-                <text
-                    style={{ textAnchor: 'start', fontSize: '10px' }}
-                    transform={`translate(20,0), rotate(70)`}
-                    y={25} x={0}
-                >
-                    {tickValue}
-                </text>
+
+    return (
+        <g>
+            {/* Render the x-axis line */}
+            <line x1={0} y1={height} x2={width} y2={height} stroke={'black'} />
+
+            {/* Render linear scale ticks */}
+            {isLinear && xScale.ticks().map(tick => (
+                <g key={tick} transform={`translate(${xScale(tick)}, ${height})`}>
+                    <line y2={5} stroke={"black"} />
+                    <text style={{ textAnchor: 'middle', fontSize: '10px' }} y={15}>
+                        {tick}
+                    </text>
                 </g>
             ))}
-            
 
-            <text
-                    style={{ textAnchor: 'end', fontSize: '15px'}}
-                    x={width}
-                    y={height-5}
-                >
-                    {axisLable}
-                </text>
-        
-        </g>);
+            {/* Render band scale ticks */}
+            {!isLinear && xScale.domain().map(tickValue => (
+                <g key={tickValue} transform={`translate(${xScale(tickValue) + xScale.bandwidth() / 2}, ${height})`}>
+                    <line y2={5} stroke={"black"} />
+                    <text
+                        style={{ textAnchor: 'start', fontSize: '10px' }}
+                        transform={`translate(20,0), rotate(70)`}
+                        y={25}
+                    >
+                        {tickValue}
+                    </text>
+                </g>
+            ))}
 
-        
-    }else {
-    return <g></g>
+            {/* Render axis label */}
+            <text style={{ textAnchor: 'end', fontSize: '15px' }} x={width} y={height - 5}>
+                {axisLable}
+            </text>
+        </g>
+    );
 }
-}
+
 
 export default XAxis
