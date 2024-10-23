@@ -13,7 +13,7 @@
 // - yScale: the scale for the y coordinate
 
     function XAxis({ xScale, height, width, axisLabel }) {
-        if (!xScale) return null; // Ensure xScale is defined
+        if (!xScale) return null; 
     
         const isLinear = typeof xScale.domain()[0] === 'number';
     
